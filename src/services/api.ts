@@ -11,7 +11,7 @@ export const createUser = async (user: {full_name: string, email: string, addres
 }
 
 export const getUsers = async (page: number) => {
-    const { data } = await api.get(`/users?pageNumber=${page}&pageSize=10`)
+    const { data } = await api.get(`/users?pageNumber=${page}&pageSize=4`)
     return data
 }
 

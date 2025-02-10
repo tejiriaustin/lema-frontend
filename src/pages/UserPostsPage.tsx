@@ -6,7 +6,7 @@ import { PostCard } from "../components/PostCard";
 import { CreatePostModal } from "../components/CreatePostModal";
 import { DeleteConfirmationModal } from "../components/DeleteConfirmationModal";
 import { Post } from '../types';
-import { ChevronLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import {NewPostCard} from "../components/NewPostCard.tsx";
 
 export function UserPostsPage() {
@@ -33,13 +33,15 @@ export function UserPostsPage() {
     return (
         <div className="p-8">
             <div className="max-w-6xl mx-auto">
-                <Link
-                    to="/"
-                    className="inline-flex items-center text-gray-600 mb-6 tracking-wide"
-                >
-                    <ChevronLeft className="w-4 h-4 mr-1" />
-                    Back to Users
-                </Link>
+                <div className="text-[16px]">
+                    <Link
+                        to="/"
+                        className="inline-flex items-center text-gray-600 mb-6 tracking-wide"
+                    >
+                        <ArrowLeft className="w-6 h-8 mr-2" />
+                        Back to Users
+                    </Link>
+                </div>
 
                 <div className="mb-8">
                     <h1 className="text-4xl mb-2">{posts?.data?.body.user.fullName}</h1>

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Loader } from "./Loader";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 interface Column<T> {
     header: string;
@@ -35,85 +35,121 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
         }
     };
 
+    const renderPaginationNumbers = () => {
+        const pages = [];
+        const showEllipsis = totalPages > 7;
+
+        if (showEllipsis) {
+            if (currentPage <= 4) {
+                for (let i = 1; i <= 5; i++) pages.push(i);
+                pages.push('...');
+                pages.push(totalPages);
+            } else if (currentPage >= totalPages - 3) {
+                pages.push(1);
+                pages.push('...');
+                for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+            } else {
+                pages.push(1);
+                pages.push('...');
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+                pages.push('...');
+                pages.push(totalPages);
+            }
+        } else {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        }
+
+        return pages;
+    };
+
     return (
-        <div className="rounded-lg shadow-sm overflow-hidden border border-gray-200 font-inter">
-            <table className="w-full border-collapse">
-                <thead>
-                <tr>
-                    {columns.map((column) => (
-                        <th
-                            key={String(column.key)}
-                            className="text-left text-[14px] font-medium text-gray-700 py-3 px-6"
-                            style={{ width: column.width }}
-                        >
-                            {column.header}
-                        </th>
-                    ))}
-                </tr>
-                </thead>
-                <tbody>
-                {isLoading ? (
-                    <tr>
-                        <td colSpan={columns.length} className="h-64">
-                            <div className="flex items-center justify-center h-full">
-                                <Loader />
-                            </div>
-                        </td>
-                    </tr>
-                ) : paginatedData.length > 0 ? (
-                    paginatedData.map((item, index) => (
-                        <tr
-                            key={index}
-                            onClick={() => onRowClick?.(item)}
-                            className="cursor-pointer border-b last:border-none hover:bg-gray-50"
-                        >
+        <div className="flex flex-col">
+            <div className="overflow-x-auto">
+                <div className="rounded-lg shadow-sm overflow-hidden border border-gray-200 font-inter min-w-[640px]">
+                    <table className="w-full border-collapse">
+                        <thead>
+                        <tr>
                             {columns.map((column) => (
-                                <td key={String(column.key)}
-                                    className={`text-[16px] py-3 px-6 tracking-wide ${
-                                        column.key === 'fullName'
-                                            ? 'font-[475] text-[#535862]'
-                                            : 'font-[425] text-gray-500'
-                                    }`}>
-                                    {column.render
-                                        ? column.render(item[column.key], item)
-                                        : String(item[column.key] || "")}
-                                </td>
+                                <th
+                                    key={String(column.key)}
+                                    className="text-left text-[14px] font-medium text-gray-700 py-5 px-6"
+                                    style={{width: column.width}}
+                                >
+                                    {column.header}
+                                </th>
                             ))}
                         </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan={columns.length} className="text-center text-gray-500 py-4">
-                            No data available.
-                        </td>
-                    </tr>
-                )}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                        {isLoading ? (
+                            <tr>
+                                <td colSpan={columns.length} className="h-64">
+                                    <div className="flex items-center justify-center h-full">
+                                        <Loader/>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : paginatedData.length > 0 ? (
+                            paginatedData.map((item, index) => (
+                                <tr
+                                    key={index}
+                                    onClick={() => onRowClick?.(item)}
+                                    className="cursor-pointer border-b last:border-none hover:bg-gray-50"
+                                >
+                                    {columns.map((column) => (
+                                        <td key={String(column.key)}
+                                            className={`text-[16px] py-7 px-6 tracking-wide ${
+                                                column.key === 'address' ? 'truncate max-w-[1px]' : ''
+                                            } ${
+                                                column.key === 'fullName'
+                                                    ? 'font-[475] text-[#535862]'
+                                                    : 'font-[425] text-gray-500'
+                                            }`}>
+                                            {column.render
+                                                ? column.render(item[column.key], item)
+                                                : String(item[column.key] || "")}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={columns.length} className="text-center text-gray-500 py-4">
+                                    No data available.
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-                <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-200">
+            <div className="flex justify-end mt-4 px-6 py-4 bg-white">
+                <div className="flex items-center gap-2">
                     <button
-                        className={`flex items-center gap-1 text-sm ${
-                            currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "text-gray-700 hover:text-gray-900"
+                        className={`flex items-center gap-3 text-[16px] ${
+                            currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "text-gray-800 hover:text-gray-900"
                         }`}
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage === 1}
                     >
-                        <ChevronLeft size={16} />
+                        <ArrowLeft size={18}/>
                         Previous
                     </button>
 
                     <div className="flex gap-2">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        {renderPaginationNumbers().map((page, index) => (
                             <button
-                                key={page}
+                                key={index}
                                 className={`w-8 h-8 flex items-center justify-center text-sm rounded-lg ${
-                                    currentPage === page ? "bg-purple-200 text-purple-800 font-semibold" : "text-gray-700 hover:bg-gray-100"
+                                    page === '...'
+                                        ? 'cursor-default'
+                                        : page === currentPage
+                                            ? "bg-purple-200 text-purple-800 font-semibold"
+                                            : "text-gray-700 hover:bg-gray-100"
                                 }`}
-                                onClick={() => goToPage(page)}
+                                onClick={() => typeof page === 'number' && goToPage(page)}
+                                disabled={page === '...'}
                             >
                                 {page}
                             </button>
@@ -121,17 +157,17 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
                     </div>
 
                     <button
-                        className={`flex items-center gap-1 text-sm ${
+                        className={`flex items-center gap-3 text-[16px] ${
                             currentPage === totalPages ? "text-gray-400 cursor-not-allowed" : "text-gray-700 hover:text-gray-900"
                         }`}
                         onClick={() => goToPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >
                         Next
-                        <ChevronRight size={16} />
+                        <ArrowRight size={18}/>
                     </button>
                 </div>
-            )}
+            </div>
         </div>
     );
 }

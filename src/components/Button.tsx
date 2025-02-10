@@ -5,9 +5,10 @@ interface ButtonProps {
     onClick?: () => void;
     type?: 'button' | 'submit';
     disabled?: boolean;
+    className?: string;
 }
 
-export function Button({title, variant = 'secondary', isLoading = false, onClick, type = 'button', disabled = false}: ButtonProps) {
+export function Button({title, variant = 'secondary', isLoading = false, onClick, type = 'button', disabled = false, className}: ButtonProps) {
     const baseStyles = "px-6 py-2 rounded-md text-[14px] font-inter transition-colors";
     const variants = {
         primary: "bg-[#334155] text-white hover:bg-gray-500",
@@ -19,7 +20,7 @@ export function Button({title, variant = 'secondary', isLoading = false, onClick
             type={type}
             onClick={onClick}
             disabled={disabled || isLoading}
-            className={`${baseStyles} ${variants[variant]}`}
+            className={`${baseStyles} ${variants[variant]} ${className}`}
         >
             {isLoading ? (
                 <div className="flex items-center justify-center">

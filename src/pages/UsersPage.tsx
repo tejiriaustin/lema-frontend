@@ -14,7 +14,7 @@ export function UsersPage() {
 
     const columns = [
         { header: "Full Name", key: "fullName" as const },
-        { header: "Email Address", key: "email" as const },
+        { header: "Email Address", key: "email" as const, width: "300px"},
         {
             header: "Address",
             key: "address" as const,
@@ -40,22 +40,29 @@ export function UsersPage() {
     }
 
     return (
-        <div className="p-8 max-w-6xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-7xl mb-6 font-">Users</h1>
-                <Button title="Create User" variant="primary" onClick={() => setIsModalOpen(true)}/>
-            </div>
-            <div className="rounded-lg shadow-sm">
-                <Table
-                    isLoading={isLoading}
-                    data={data?.data?.body.users || []}
-                    columns={columns}
-                    onRowClick={handleRowClick}
-                    rowsPerPage={10}
-                    currentPage={page}
-                    onPageChange={handlePageChange}
-                    totalPages={data?.data?.totalPages || 1}
+        <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto">
+            <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-normal">Users</h1>
+                <Button
+                    title="Create User"
+                    variant="primary"
+                    onClick={() => setIsModalOpen(true)}
                 />
+            </div>
+
+            <div className="rounded-lg shadow-sm -mx-4 sm:mx-0">
+                <div className="overflow-x-auto">
+                    <Table
+                        isLoading={isLoading}
+                        data={data?.data?.body.users || []}
+                        columns={columns}
+                        onRowClick={handleRowClick}
+                        rowsPerPage={10}
+                        currentPage={page}
+                        onPageChange={handlePageChange}
+                        totalPages={data?.data?.totalPages || 1}
+                    />
+                </div>
             </div>
 
             <CreateUserModal
