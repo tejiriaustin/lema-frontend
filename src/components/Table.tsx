@@ -35,14 +35,6 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
         }
     };
 
-    if (isLoading) {
-        return (
-            <div className="w-full h-64 flex items-center justify-center">
-                <Loader />
-            </div>
-        );
-    }
-
     return (
         <div className="rounded-lg shadow-sm overflow-hidden border border-gray-200 font-inter">
             <table className="w-full border-collapse">
@@ -60,7 +52,15 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
                 </tr>
                 </thead>
                 <tbody>
-                {paginatedData.length > 0 ? (
+                {isLoading ? (
+                    <tr>
+                        <td colSpan={columns.length} className="h-64">
+                            <div className="flex items-center justify-center h-full">
+                                <Loader />
+                            </div>
+                        </td>
+                    </tr>
+                ) : paginatedData.length > 0 ? (
                     paginatedData.map((item, index) => (
                         <tr
                             key={index}
@@ -69,8 +69,10 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
                         >
                             {columns.map((column) => (
                                 <td key={String(column.key)}
-                                    className={`text-[16px] text-gray-500 py-3 px-6 tracking-wide ${
-                                        column.key === 'fullName' ? 'font-medium text-[#535862]' : 'font-normal'
+                                    className={`text-[16px] py-3 px-6 tracking-wide ${
+                                        column.key === 'fullName'
+                                            ? 'font-[475] text-[#535862]'
+                                            : 'font-[425] text-gray-500'
                                     }`}>
                                     {column.render
                                         ? column.render(item[column.key], item)
@@ -88,6 +90,7 @@ export function Table<T>({data, columns, onRowClick, isLoading, rowsPerPage = 4,
                 )}
                 </tbody>
             </table>
+
 
             {/* Pagination Controls */}
             {totalPages > 1 && (

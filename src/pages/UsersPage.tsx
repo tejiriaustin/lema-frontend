@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUsers } from '../hooks/useUsers.tsx';
 import { Table } from '../components/Table';
-import { Loader } from '../components/Loader';
 import { User, Address } from '../types';
 import {Button} from "../components/Button.tsx";
 import {CreateUserModal} from "../components/CreateUserModal.tsx";
@@ -40,12 +39,6 @@ export function UsersPage() {
         setIsModalOpen(false)
     }
 
-    if (isLoading) return (
-        <div className="absolute inset-0 flex items-center justify-center">
-            <Loader />
-        </div>
-    );
-
     return (
         <div className="p-8 max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-6">
@@ -54,6 +47,7 @@ export function UsersPage() {
             </div>
             <div className="rounded-lg shadow-sm">
                 <Table
+                    isLoading={isLoading}
                     data={data?.data?.body.users || []}
                     columns={columns}
                     onRowClick={handleRowClick}
