@@ -2,7 +2,7 @@ import axios from 'axios'
 import {Address, User} from "../types";
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/v1'
+    baseURL: 'http://16.171.143.117:8080/v1'
 })
 
 export const createUser = async (user: {full_name: string, email: string, address: Address}): Promise<User> => {
