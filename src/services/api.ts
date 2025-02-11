@@ -1,8 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
 import {Address, User} from "../types";
+import { API_URL } from '../config/env';
 
 const api = axios.create({
-    baseURL: 'http://16.171.143.117:8080/v1'
+    baseURL: API_URL
 })
 
 export const createUser = async (user: {full_name: string, email: string, address: Address}): Promise<User> => {
