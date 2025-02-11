@@ -1,12 +1,12 @@
 import axios from 'axios';
-import {Address, User} from "../types";
+import {User} from "../types";
 import { API_URL } from '../config/env';
 
 const api = axios.create({
     baseURL: API_URL
 })
 
-export const createUser = async (user: {full_name: string, email: string, address: Address}): Promise<User> => {
+export const createUser = async (user: { full_name: string; email: string; address: { street: string; city: string; state: string; zipcode: string}}): Promise<User> => {
     const { data } = await api.post(`/users`, user)
     return data
 }
