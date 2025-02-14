@@ -9,6 +9,7 @@ export function useUsers(page: number) {
         queryFn: () => getUsers(page),
         placeholderData: keepPreviousData,
         staleTime: 5000,
+        retry: 1,
     })
 
     const createUserMutation = useMutation({
@@ -19,6 +20,7 @@ export function useUsers(page: number) {
             }).then(() => {
                 console.log("user queries invalidated")
             })
+
             queryClient.prefetchQuery({
                 queryKey: ['users', page],
                 queryFn: () => getUsers(page)
@@ -32,6 +34,8 @@ export function useUsers(page: number) {
         data,
         createUser: createUserMutation.mutate,
         isLoading: data.isLoading || createUserMutation.isPending,
-        error: data.error || createUserMutation.error
+        error: data.error || createUserMutation.error,
+        isError: createUserMutation.isError,
+        mutationError: createUserMutation.error
     }
 }
